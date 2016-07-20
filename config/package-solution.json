@@ -1,0 +1,11 @@
+{
+  "solution": {
+    "name": "deshir-nintex-my-assigned-tasks-client-side-solution",
+    "id": "55816b38-8204-4a7b-9e6d-9846a816c74f",
+    "version": "1.0.0.0"
+  },
+  "paths": {
+    "manifestsMatch": "dist/**/*.manifest.json",
+    "zippedPackage": "deshir-nintex-my-assigned-tasks.spapp"
+  }
+}

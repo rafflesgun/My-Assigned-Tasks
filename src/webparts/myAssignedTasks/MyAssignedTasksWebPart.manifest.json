@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../node_modules/@ms/sp-modules-common/lib/manifestSchemas/jsonSchemas/clientSideComponentManifestSchema.json",
+
+  "id": "30a58dc2-6425-4af9-8a24-959ed0b2c4e4",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+
+  "preconfiguredEntries": [{
+    "groupId": "30a58dc2-6425-4af9-8a24-959ed0b2c4e4",
+    "group": { "default": "Under Development" },
+    "title": { "default": "DeshirMyAssignedTasks" },
+    "description": { "default": "Shows the user tasks that have been assigned to them." },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "description": "Deshir MyAssignedTasks",
+      "value": 15
+    }
+  }]
+}
