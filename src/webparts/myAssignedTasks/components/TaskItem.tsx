@@ -2,13 +2,17 @@ import * as React from 'react';
 
 export interface ITaskItem {
   description: string;
+  clickEvent(): void;
 }
 
 export default class MyAssignedTasks extends React.Component<ITaskItem, {}> {
+
+
+
   public render(): JSX.Element {
     return (
-      <div>
-        <div>This is the <b>{this.props.description}</b> webpart.</div>
+      <div onClick={this.props.clickEvent}>
+        {this.props.description}
       </div>
     );
   }
