@@ -1,5 +1,6 @@
 import {
-  DisplayMode
+  DisplayMode,
+  ODataBatch
 } from '@ms/sp-client-base';
 
 import {
@@ -34,6 +35,7 @@ export interface ITask {
   Id: string;
   DueDate: Date;
   Priority: Number;
+  Author: any;
 }
 
 export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAssignedTasksWebPartProps> {
@@ -80,7 +82,10 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
         description: item.Body,
         priority: item.Priority,
         id: parseInt(item.Id),
-        dueDate: item.DueDate ? new Date(item.DueDate) : null
+        dueDate: item.DueDate ? new Date(item.DueDate) : null,
+        authorTitle: item.Author.Title,
+        authorEmail: item.Author.EMail,
+        authorPicture: this._getPictureUrl(item.Author.EMail)
       };
     });
 
@@ -88,10 +93,56 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
   }
 
   private _getTaskData(): Promise<ITasks> {
-    return this.host.httpClient.get(this.host.pageContext.webAbsoluteUrl + `/_api/web/lists/GetByTitle('${this.properties.taskListName || 'Tasks'}')/items?$filter=(AssignedToId eq '${window["_spPageContextInfo"].userId || '0'}' and PercentComplete eq 0)`)
+    const select: string = `$select=*,Author/Id,Author/Title,Author/EMail,Editor/Id,Editor/Title,Editor/EMail`;
+    return this.host.httpClient.get(this.host.pageContext.webAbsoluteUrl + `/_api/web/lists/GetByTitle('${this.properties.taskListName || 'Tasks'}')/items?$filter=(AssignedToId eq '${window["_spPageContextInfo"].userId || '0'}' and PercentComplete eq 0)&${select}&$expand=Author,Editor`)
       .then((response: Response) => {
         return response.json();
       });
+  }
+
+  private getItemTypeForListName(name: string): string {
+    return "SP.Data." + name.charAt(0).toUpperCase() + name.slice(1) + "ListItem";
+  }
+
+  public updateTaskData(taskId: Number, status: string, comment: string): void {
+    const batch: ODataBatch = this.host.httpClient.beginBatch();
+
+    const batchPromises: Promise<{}>[] = [
+      this._updateItem(batch, taskId, status, comment)
+    ];
+
+    batch.execute()
+      .then(() => Promise.all(batchPromises).then(values => values[values.length - 1]));
+  }
+
+  private _updateItem(batch: ODataBatch, taskId: Number, status: string, comment: string): Promise<Response> {
+    var listItemUri: string = `${this.host.pageContext.webAbsoluteUrl}/_api/web/lists/GetByTitle('${this.properties.taskListName || 'Tasks'}')/items('${taskId}')`;
+
+    const headers: Headers = new Headers();
+    headers.append('If-Match', '*');
+
+    const body: {} = {
+      '@data.type': this.getItemTypeForListName(this.properties.taskListName),
+      'PercentComplete': 100
+    };
+
+    return batch.fetch(listItemUri, {
+      body: JSON.stringify(body),
+      headers,
+      method: 'PATCH' // Use PATCH http method to perform update operation.
+    }).then(this._checkStatus);
+  }
+
+  private _checkStatus(response: Response): Promise<Response> {
+    if (response.status >= 200 && response.status < 300) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(new Error(JSON.stringify(response)));
+    }
+  }
+
+  private _getPictureUrl(eMail: string): string {
+    return `${this.host.pageContext.webAbsoluteUrl}/_layouts/15/userphoto.aspx?size=L&username=${eMail}`;
   }
 
   private _getMockTaskData(): Promise<ITasks> {
@@ -104,42 +155,66 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
             Id: '1',
             Description: 'Leave approval between 1st August 2016 till 15 August 2016',
             Priority: 2,
-            DueDate: null
+            DueDate: null,
+            Author: {
+              Title: "Admin",
+              EMail: "admin@mail.com"
+            }
           },
           {
             Title: 'Expenses Approval',
             Id: '2',
             Description: 'Expenses approval',
             Priority: 1,
-            DueDate: new Date('2016-07-22T21:13:49Z')
+            DueDate: new Date('2016-07-22T21:13:49Z'),
+            Author: {
+              Title: "Admin",
+              EMail: "admin@mail.com"
+            }
           },
           {
             Title: 'Deployment Request',
             Id: '3',
             Description: 'Deployment Request',
             Priority: 1,
-            DueDate: new Date('2016-08-22T21:13:49Z')
+            DueDate: new Date('2016-08-22T21:13:49Z'),
+            Author: {
+              Title: "Admin",
+              EMail: "admin@mail.com"
+            }
           },
           {
             Title: 'Drinks Order Approval',
             Id: '4',
             Description: 'Drinks Order Approval',
             Priority: 3,
-            DueDate: new Date('2016-09-22T21:13:49Z')
+            DueDate: new Date('2016-09-22T21:13:49Z'),
+            Author: {
+              Title: "Admin",
+              EMail: "admin@mail.com"
+            }
           },
           {
             Title: 'Invoice Approval',
             Id: '5',
             Description: 'Invoice Approval',
             Priority: 1,
-            DueDate: new Date('2016-10-22T21:13:49Z')
+            DueDate: new Date('2016-10-22T21:13:49Z'),
+            Author: {
+              Title: "Admin",
+              EMail: "admin@mail.com"
+            }
           },
           {
             Title: 'New Applicant',
             Id: '6',
             Description: 'New Applicant',
             Priority: 3,
-            DueDate: new Date('2016-11-22T21:13:49Z')
+            DueDate: new Date('2016-11-22T21:13:49Z'),
+            Author: {
+              Title: "Admin",
+              EMail: "admin@mail.com"
+            }
           }
         ]
       };
