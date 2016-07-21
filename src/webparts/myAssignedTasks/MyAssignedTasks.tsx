@@ -16,6 +16,7 @@ export interface IMyAssignedTasksProps {
   description: string;
   taskListName: string;
   fetchTasksAsync(): Promise<Array<ITaskItem>>;
+  updateTaskAsync(taskId: Number, status: string, comment: string): Promise<Response>;
 }
 
 export interface IMyAssignedTasksState {
@@ -54,10 +55,13 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   }
 
   public approveEvent(id: Number, e: Object): void {
-    const tasks: Array<ITaskItem> = this.state.tasks.filter((task: ITaskItem) => {
-      return id !== task.id;
-    });
-    this.setState({ tasks: tasks });
+    this.props.updateTaskAsync(id, 'Approve', '')
+      .then((response) => {
+        const tasks: Array<ITaskItem> = this.state.tasks.filter((task: ITaskItem) => {
+          return id !== task.id;
+        });
+        this.setState({ tasks: tasks });
+      });
   }
 
   public rejectEvent(id: Number, e: Object): void {
@@ -72,10 +76,10 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   private _getItems(sort: string): Array<ITaskItem> {
     var empty: Array<ITaskItem> = Array<ITaskItem>();
     var value: Array<ITaskItem> = Array<ITaskItem>();
-    var tasks = this.state.tasks;
+    var tasks: Array<ITaskItem> = this.state.tasks;
 
     if (this.state.searchTerm !== '' && this.state.searchTerm) {
-      const re = new RegExp(this.state.searchTerm, "gi");
+      const re: RegExp = new RegExp(this.state.searchTerm, "gi");
       tasks = tasks.filter((task: ITaskItem) => {
         return task.name.match(re) !== null;
       });
@@ -108,23 +112,26 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   }
 
   private _rejectItem(e: Object): void {
-    var id: Number = this.state.rejectingItem;
-    var removingItem: ITaskItem;
-    var tasks: Array<ITaskItem> = this.state.tasks.filter((item: ITaskItem) => {
-      if (item.id !== id) {
-        removingItem = item;
-        return true;
-      }
+    var taskId: Number = this.state.rejectingItem;
 
-      return false;
-    });
+    this.props.updateTaskAsync(taskId, 'Reject', this.refs.rejectionReason.value)
+      .then((response) => {
+        var removingItem: ITaskItem;
+        var tasks: Array<ITaskItem> = this.state.tasks.filter((item: ITaskItem) => {
+          if (item.id !== taskId) {
+            removingItem = item;
+            return true;
+          }
 
-    this.setState({
-      tasks: tasks,
-      rejectingItem: null,
-      overlayShowing: false
-    });
-    console.log(this.refs.rejectionReason.value, removingItem);
+          return false;
+        });
+
+        this.setState({
+          tasks: tasks,
+          rejectingItem: null,
+          overlayShowing: false
+        });
+      });
   }
 
   private _search(e: string): void {
@@ -141,7 +148,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
           task={task}
           key={task.id.toString() }
           approveEvent={this.approveEvent.bind(this) }
-          rejectEvent={this.rejectEvent.bind(this)} />
+          rejectEvent={this.rejectEvent.bind(this) } />
       );
     });
     var dueTasks: any = due.map((task: ITaskItem, key: Number) => {
@@ -150,7 +157,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
           task={task}
           key={task.id.toString() }
           approveEvent={this.approveEvent.bind(this) }
-          rejectEvent={this.rejectEvent.bind(this)} />
+          rejectEvent={this.rejectEvent.bind(this) } />
       );
     });
 
@@ -161,7 +168,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
       <div>
         <h3>My Assigned Tasks</h3>
         <div>
-          <SearchBox onChanged={this._search.bind(this)} />
+          <SearchBox onChanged={this._search.bind(this) } />
           <Pivot>
             <PivotItem linkText='Priority' itemKey={0}>
               <div className={styles.myAssignedTasks}>
@@ -184,12 +191,12 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
             <div className='ms-OverlayBasicExample'>
               <div className={styles.innerOverlay}>
                 <TextField label='Rejection reason' multiline ref="rejectionReason" />
-                <Button onClick={this._rejectItem.bind(this)} buttonType={ ButtonType.primary }>Reject</Button>
-                <Button onClick={this._closeOverlay.bind(this)}>Cancel</Button>
+                <Button onClick={this._rejectItem.bind(this) } buttonType={ ButtonType.primary }>Reject</Button>
+                <Button onClick={this._closeOverlay.bind(this) }>Cancel</Button>
               </div>
             </div>
           </Overlay>
-        )}
+        ) }
 
       </div>
     );

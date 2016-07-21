@@ -49,7 +49,8 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
     const element: React.ReactElement<IMyAssignedTasksProps> = React.createElement(MyAssignedTasks, {
       description: this.properties.description,
       taskListName: this.properties.taskListName,
-      fetchTasksAsync: this.fetchTasksAsync.bind(this)
+      fetchTasksAsync: this.fetchTasksAsync.bind(this),
+      updateTaskAsync: this.updateTaskAsync.bind(this)
     });
 
     ReactDom.render(element, this.domElement);
@@ -77,10 +78,15 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
         item.Priority = item.Priority.replace(/[^\d]+/g, '');
       }
 
+      var description: string = '';
+      if (typeof (item.Body) === 'string') {
+        description = item.Body.replace(/(<([^>]+)>)/ig, '').replace('&#160;', ' ');
+      }
+
       return {
         name: item.Title,
-        description: item.Body,
-        priority: item.Priority,
+        description: description,
+        priority: parseInt(item.Priority),
         id: parseInt(item.Id),
         dueDate: item.DueDate ? new Date(item.DueDate) : null,
         authorTitle: item.Author.Title,
@@ -104,14 +110,14 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
     return "SP.Data." + name.charAt(0).toUpperCase() + name.slice(1) + "ListItem";
   }
 
-  public updateTaskData(taskId: Number, status: string, comment: string): void {
+  public updateTaskAsync(taskId: Number, status: string, comment: string): Promise<Response> {
     const batch: ODataBatch = this.host.httpClient.beginBatch();
 
     const batchPromises: Promise<{}>[] = [
       this._updateItem(batch, taskId, status, comment)
     ];
 
-    batch.execute()
+    return batch.execute()
       .then(() => Promise.all(batchPromises).then(values => values[values.length - 1]));
   }
 
@@ -123,7 +129,9 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
 
     const body: {} = {
       '@data.type': this.getItemTypeForListName(this.properties.taskListName),
-      'PercentComplete': 100
+      'PercentComplete': 100,
+      'Outcome': status,
+      'Comment': comment
     };
 
     return batch.fetch(listItemUri, {
