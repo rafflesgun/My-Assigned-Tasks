@@ -25,7 +25,8 @@ export interface ITaskItemState {
 
 export interface ITaskItemProps {
   task: ITaskItem;
-  actionEvent(type: String, id: Number, e: Object): void;
+  approveEvent(id: Number, e: Object): void;
+  rejectEvent(id: Number, e: Object): void;
   key: String;
 }
 
@@ -39,11 +40,37 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     };
   }
 
-  public clickHandler(type: string, e: Object): void {
+  private _approveHandler(e: Object): void {
     this.setState({ fadeAway: 'ms-u-scaleUpOut103' });
     setTimeout(() => {
-      this.props.actionEvent(type, this.props.task.id, e);
+      this.props.approveEvent(this.props.task.id, e);
     }, 300);
+  }
+
+  private _rejecthandler(e: Object): void {
+    this.props.rejectEvent(this.props.task.id, e);
+  }
+
+  private _getPriorityClass(type: string, priority: Number): string {
+    if (type === 'icon') {
+      switch (priority) {
+        case 1:
+          return 'ms-Icon--alert';
+        case 2:
+          return 'ms-Icon--note';
+        default:
+          return 'ms-Icon--today';
+      }
+    } else {
+      switch (priority) {
+        case 1:
+          return styles.high;
+        case 2:
+          return styles.normal;
+        default:
+          return styles.low;
+      }
+    }
   }
 
   public render(): JSX.Element {
@@ -57,17 +84,17 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
     return (
       <div className={this.state.fadeAway}>
-        <div className={styles.TaskItem}>
+        <div className={styles.TaskItem + " " + this._getPriorityClass('class', task.priority)}>
           <div className={styles.ApprovalBox}>
             <a href="#"
               className={styles.RejectButton + ' ' + styles['rounded-button']}
-              onClick={this.clickHandler.bind(this, 'reject') }
+              onClick={this._rejecthandler.bind(this, 'reject') }
               >
               <i className="ms-Icon ms-Icon--x"></i>
             </a>
             <a href="#"
               className={styles.ApproveButton + ' ' + styles['rounded-button']}
-              onClick={this.clickHandler.bind(this, 'approved') }
+              onClick={this._approveHandler.bind(this, 'approved') }
               >
               <i className={"ms-Icon ms-Icon--checkboxCheck " + styles['larger-icon']}></i>
             </a>
@@ -82,8 +109,8 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
               <Label className={styles.AssignedByLabel}>Assigned by: </Label>
               <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />
             </div>
-            <div>
-              {task.priority}
+            <div className={styles.PriorityIcon + " " + this._getPriorityClass('class', task.priority)}>
+              <span className={"ms-Icon " + this._getPriorityClass('icon', task.priority)}></span>
             </div>
           </div>
         </div>
