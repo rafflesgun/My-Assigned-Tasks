@@ -73,7 +73,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   private setSort(item?: PivotItem, ev?: React.MouseEvent): void {
     ev.preventDefault();
-    const sort = item.props.linkText === 'Priority' ? 'priority' : 'dueDate';
+    const sort = item.props.linkText === 'Priority' ? 'Priority' : 'DueDate';
     this.setState({
       tasks: this.state.tasks
     });
@@ -81,8 +81,8 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   public render(): JSX.Element {
 
-    let priority = this._getItems('priority');
-    let due = this._getItems('dueDate');
+    let priority = this._getItems('Priority');
+    let due = this._getItems('DueDate');
     const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />

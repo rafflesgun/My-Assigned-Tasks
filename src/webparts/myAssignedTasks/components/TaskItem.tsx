@@ -48,11 +48,10 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
   public render(): JSX.Element {
     const task: ITaskItem = this.props.task;
-    const dateString = task.dueDate ? task.dueDate.toDateString() : '';
     const date = task.dueDate
       ? (
         <div className={styles.DueDate}>
-          <Label className={styles.AssignedByLabel}>{`${dateString}`}</Label>
+          <Label className={styles.AssignedByLabel}>{task.dueDate.getDate() + "/" + task.dueDate.getMonth() + "/" + task.dueDate.getFullYear()}</Label>
         </div>
       ) : <div></div>;
 
