@@ -1,0 +1,36 @@
+.TaskItem {
+  border: 1px solid #e1e1e1;
+  padding: 5px;
+  border-bottom: none;
+}
+
+.rounded-button {
+  border-radius: 15px;
+  border: 1px solid #e1e1e1;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  position: relative;
+  margin-right: 4px;
+
+  > i {
+    position: absolute;
+    top: 9px;
+    right: 8px;
+
+    &.larger-icon {
+      top: 7px;
+      right: 5px;
+    }
+  }
+}
+
+.larger-icon {
+  font-size: 1.4em;
+}
+
+.AssignedImage {
+  border-radius: 3px;
+  display: inline-block;
+  float: right;
+}
