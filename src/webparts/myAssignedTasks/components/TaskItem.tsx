@@ -82,6 +82,9 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
               <Label className={styles.AssignedByLabel}>Assigned by: </Label>
               <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />
             </div>
+            <div>
+              {task.priority}
+            </div>
           </div>
         </div>
       </div>
