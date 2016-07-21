@@ -81,8 +81,8 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   public render(): JSX.Element {
 
-    let priority = this._getItems('Priority');
-    let due = this._getItems('DueDate');
+    let priority = this._getItems('priority');
+    let due = this._getItems('dueDate');
     const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />

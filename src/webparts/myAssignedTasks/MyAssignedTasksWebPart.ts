@@ -80,7 +80,7 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
         description: item.Body,
         priority: item.Priority,
         id: parseInt(item.Id),
-        dueDate: new Date(item.DueDate)
+        dueDate: item.DueDate ? new Date(item.DueDate) : null
       };
     });
 
