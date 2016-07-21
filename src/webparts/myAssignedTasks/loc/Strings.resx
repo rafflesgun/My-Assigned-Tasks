@@ -129,4 +129,8 @@
     <value>Description</value>
     <comment>The label for the description field in property pane.</comment>
   </data>
+  <data name="TaskListNameFieldLabel" xml:space="preserve">
+    <value>Task List Name</value>
+    <comment>The label for the task list name field in property pane.</comment>
+  </data>
 </root>
