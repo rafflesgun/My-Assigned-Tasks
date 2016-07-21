@@ -11,6 +11,7 @@ export interface ITaskItem {
   name: string;
   description?: string;
   priority: Number;
+  dueDate: String;
   id: Number;
 }
 
@@ -42,7 +43,13 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
   }
 
   public render(): JSX.Element {
-    var task: ITaskItem = this.props.task;
+    const task: ITaskItem = this.props.task;
+    const date = task.dueDate
+      ? (
+        <div className={styles.DueDate}>
+          <Label className={styles.AssignedByLabel}>{`${task.dueDate}`}</Label>
+        </div>
+      ) : <div></div>;
 
     return (
       <div className={this.state.fadeAway}>
@@ -65,9 +72,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
             <div>
               <span className="ms-fontSize-l">{task.description}</span>
             </div>
-            <div className={styles.DueDate}>
-              <Label className={styles.AssignedByLabel}>Due: 27 May 2016</Label>
-            </div>
+            {date}
             <div className={styles.AssignedBy}>
               <Label className={styles.AssignedByLabel}>Assigned by:</Label>
               <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />

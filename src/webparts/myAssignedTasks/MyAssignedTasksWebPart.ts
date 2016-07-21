@@ -77,7 +77,8 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
         name: item.Title,
         description: item.Description,
         priority: item.Priority,
-        id: parseInt(item.Id)
+        id: parseInt(item.Id),
+        dueDate: item.DueDate
       };
     });
 
@@ -109,6 +110,34 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
             Description: 'Expenses approval',
             Priority: 1,
             DueDate: new Date('2016-07-22T21:13:49Z')
+          },
+          {
+            Title: 'Deployment Request',
+            Id: '3',
+            Description: 'Deployment Request',
+            Priority: 1,
+            DueDate: new Date('2016-08-22T21:13:49Z')
+          },
+          {
+            Title: 'Drinks Order Approval',
+            Id: '4',
+            Description: 'Drinks Order Approval',
+            Priority: 3,
+            DueDate: new Date('2016-09-22T21:13:49Z')
+          },
+          {
+            Title: 'Invoice Approval',
+            Id: '5',
+            Description: 'Invoice Approval',
+            Priority: 1,
+            DueDate: new Date('2016-10-22T21:13:49Z')
+          },
+          {
+            Title: 'New Applicant',
+            Id: '6',
+            Description: 'New Applicant',
+            Priority: 3,
+            DueDate: new Date('2016-11-22T21:13:49Z')
           }
         ]
       };

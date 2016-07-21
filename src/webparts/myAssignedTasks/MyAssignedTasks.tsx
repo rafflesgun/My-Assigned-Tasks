@@ -27,31 +27,12 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   }
 
   public componentWillMount(): void {
-    // Get data here
-    const tasks: Array<ITaskItem> = [
-      {
-        id: 0,
-        name: "First task",
-        description: "This has some content",
-        priority: 1
-      },
-      {
-        id: 1,
-        name: "Second task",
-        description: "This is what you need to do This is what you need to do this is some more data that you might want to see. Thi si the basically the best thing that we can get out of this. This is what you need to do this is some more data that you might want to see. Thi si the basically the best thing that we can get out of this.",
-        priority: 3
-      },
-      {
-        id: 2,
-        name: "Third task",
-        description: "This is some other content",
-        priority: 2
-      }
-    ];
+
+    var component = this;
 
     this.props.fetchTasksAsync()
       .then((tasks) => {
-        this.setState({
+        component.setState({
           tasks: tasks
         });
       });
@@ -61,16 +42,49 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     let tasks = this.state.tasks.filter((task) => {
       return id !== task.id;
     });
-    console.log(tasks);
     this.setState({ tasks: tasks });
-    console.log("This element has been clicked " + type);
+  }
+
+  private _getItems(sort: string): Array<ITaskItem> {
+    var empty = Array<ITaskItem>();
+    var value = Array<ITaskItem>();
+    this.state.tasks.forEach((item) => {
+      if (item[sort]) {
+        value.push(item);
+      } else {
+        empty.push(item);
+      }
+    });
+    // Get the current sort
+    value.sort(function (a, b) {
+      if (a[sort] > b[sort]) return 1;
+      if (a[sort] < b[sort]) return -1;
+      return 0;
+    }.bind(this));
+
+    return value.concat(empty).slice(0, 5);
+  }
+
+  private setSort(item?: PivotItem, ev?: React.MouseEvent): void {
+    ev.preventDefault();
+    const sort = item.props.linkText === 'Priority' ? 'priority' : 'dueDate';
+    this.setState({
+      tasks: this.state.tasks
+    });
   }
 
   public render(): JSX.Element {
 
-    const tasks: Array<Object> = this.state.tasks.map((task: ITaskItem, key: Number) => {
+    let priority = this._getItems('priority');
+    let due = this._getItems('dueDate');
+    const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
-        <TaskItem task={task} key={task.id.toString()} actionEvent={this.actionEvent.bind(this)} />
+        <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />
+      );
+    });
+    const dueTasks: Array<Object> = due.map((task: ITaskItem, key: Number) => {
+      return (
+        <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />
       );
     });
 
@@ -79,17 +93,23 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
         <h3>My Assigned Tasks</h3>
         <div>
           <Pivot>
-            <PivotItem linkText='Priority'>
+            <PivotItem linkText='Priority' itemKey={0}>
+              <div className={styles.myAssignedTasks}>
+                <div className={styles.container}>
+                  {priorityTasks}
+                </div>
+              </div>
             </PivotItem>
-            <PivotItem linkText='Due Date'>
+            <PivotItem linkText='Due Date' itemKey={1}>
+              <div className={styles.myAssignedTasks}>
+                <div className={styles.container}>
+                  {dueTasks}
+                </div>
+              </div>
             </PivotItem>
           </Pivot>
         </div>
-        <div className={styles.myAssignedTasks}>
-          <div className={styles.container}>
-            {tasks}
-          </div>
-        </div>
+
       </div>
     );
   }
