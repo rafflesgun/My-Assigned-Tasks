@@ -65,7 +65,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   private setSort(item?: PivotItem, ev?: React.MouseEvent): void {
     ev.preventDefault();
-    const sort = item.props.linkText === 'Priority' ? 'priority' : 'dueDate';
+    const sort = item.props.linkText === 'Priority' ? 'Priority' : 'DueDate';
     this.setState({
       tasks: this.state.tasks
     });
@@ -73,8 +73,8 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   public render(): JSX.Element {
 
-    let priority = this._getItems('priority');
-    let due = this._getItems('dueDate');
+    let priority = this._getItems('Priority');
+    let due = this._getItems('DueDate');
     const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem task={task} key={task.Id.toString() } actionEvent={this.actionEvent.bind(this) } />
@@ -156,8 +156,48 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
       const listData: ITaskItems = {
         value:
         [
-          { Title: 'Leave Approval', Id: 1, Description: 'Leave approval between 1st August 2016 till 15 August 2016', Priority: 2, DueDate: null },
-          { Title: 'Expenses Approval', Id: 2, Description: 'Expenses approval', Priority: 1, DueDate: new Date('2016-07-22T21:13:49Z') }
+          {
+            Title: 'Leave Approval',
+            Id: 1,
+            Description: 'Leave approval between 1st August 2016 till 15 August 2016',
+            Priority: 2,
+            DueDate: null
+          },
+          {
+            Title: 'Expenses Approval',
+            Id: 2,
+            Description: 'Expenses approval',
+            Priority: 1,
+            DueDate: new Date('2016-07-22T21:13:49Z')
+          },
+          {
+            Title: 'Deployment Request',
+            Id: 3,
+            Description: 'Deployment Request',
+            Priority: 1,
+            DueDate: new Date('2016-08-22T21:13:49Z')
+          },
+          {
+            Title: 'Drinks Order Approval',
+            Id: 4,
+            Description: 'Drinks Order Approval',
+            Priority: 3,
+            DueDate: new Date('2016-09-22T21:13:49Z')
+          },
+          {
+            Title: 'Invoice Approval',
+            Id: 5,
+            Description: 'Invoice Approval',
+            Priority: 1,
+            DueDate: new Date('2016-10-22T21:13:49Z')
+          },
+          {
+            Title: 'New Applicant',
+            Id: 6,
+            Description: 'New Applicant',
+            Priority: 3,
+            DueDate: new Date('2016-11-22T21:13:49Z')
+          }
         ]
       };
 
