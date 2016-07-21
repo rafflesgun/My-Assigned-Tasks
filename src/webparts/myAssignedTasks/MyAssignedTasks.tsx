@@ -17,18 +17,31 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     super(props);
 
     this.state = {
-      tasks: [
-        {
-          name: "First task"
-        },
-        {
-          name: "Second task"
-        },
-        {
-          name: "Third task"
-        }
-      ]
+      tasks: []
     };
+  }
+
+  private componentWillMount() {
+    // Get data here
+    console.log('mounted');
+    let tasks = [
+      {
+        name: "First task",
+        description: "This has some content"
+      },
+      {
+        name: "Second task",
+        description: "This is what you need to do"
+      },
+      {
+        name: "Third task",
+        description: "This is some other content"
+      }
+    ];
+
+    this.setState({
+      tasks: tasks
+    });
   }
 
   public clickEvent() {
@@ -37,15 +50,17 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   public render(): JSX.Element {
 
-    var tasks = this.state.tasks.map(element => {
+    var tasks = this.state.tasks.map((task, key) => {
       return (
-        <TaskItem description={'This is the description'} clickEvent={this.clickEvent} />
+        <TaskItem task={task} key={key} clickEvent={this.clickEvent} />
       );
     });
 
     return (
       <div className={styles.myAssignedTasks}>
-        {tasks}
+        <div className={styles.container}>
+          {tasks}
+        </div>
       </div>
     );
   }
