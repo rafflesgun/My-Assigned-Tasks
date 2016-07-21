@@ -1,0 +1,1 @@
+define([],function(){var e={_W7saGaTX1y7hPcvLqPNZIQ:{PropertyPaneDescription:"PropertyPaneDescription",BasicGroupName:"BasicGroupName",DescriptionFieldLabel:"DescriptionFieldLabel",TaskListNameFieldLabel:"TaskListNameFieldLabel"}};return e["default"]=e,e});

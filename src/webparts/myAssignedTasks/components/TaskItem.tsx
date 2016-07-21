@@ -13,6 +13,9 @@ export interface ITaskItem {
   priority: Number;
   dueDate: Date;
   id: Number;
+  authorTitle: string;
+  authorEmail: string;
+  authorPicture: string;
 }
 
 export interface ITaskItemState {
@@ -74,7 +77,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     const date: any = task.dueDate
       ? (
         <div className={styles.DueDate}>
-          <Label className={styles.AssignedByLabel}>{ "Due: " + task.dueDate.getDate() + "/" + task.dueDate.getMonth() + "/" + task.dueDate.getFullYear()}</Label>
+          <Label className={styles.AssignedByLabel}>{ "Due: " + task.dueDate.getDate() + "/" + (task.dueDate.getMonth() + 1) + "/" + task.dueDate.getFullYear()}</Label>
         </div>
       ) : <div></div>;
 
@@ -103,7 +106,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
             {date}
             <div className={styles.AssignedBy}>
               <Label className={styles.AssignedByLabel}>Assigned by: </Label>
-              <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />
+              <Image className={styles.AssignedImage} src={task.authorPicture} alt={task.authorTitle} imageFit={ImageFit.cover} width={30} height={30} />
             </div>
             <div className={styles.PriorityIcon + " " + this._getPriorityClass('class', task.priority)}>
               <span className={"ms-Icon " + this._getPriorityClass('icon', task.priority)}></span>

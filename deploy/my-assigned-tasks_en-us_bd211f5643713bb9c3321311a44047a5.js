@@ -1,0 +1,1 @@
+define([],function(){var e={_W7saGaTX1y7hPcvLqPNZIQ:{PropertyPaneDescription:"Manage the MyAssignedTasks webpart settings.",BasicGroupName:"Basic",DescriptionFieldLabel:"Description",TaskListNameFieldLabel:"Task List Name"}};return e["default"]=e,e});
