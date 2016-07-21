@@ -1,17 +1,26 @@
+$border-color: #DEDEDE;
+$color-danger: #D83B01;
+$color-success: #107C10;
+$color-due-date: #A6A6A6;
+
 .TaskItem {
-  border: 1px solid #e1e1e1;
+  border: 1px solid $border-color;
   padding: 5px;
   border-bottom: none;
+  overflow: hidden;
+  position: relative;
+  min-height: 93px;
 }
 
 .rounded-button {
   border-radius: 15px;
-  border: 1px solid #e1e1e1;
+  border: 1px solid $border-color;
   height: 30px;
   width: 30px;
   display: inline-block;
   position: relative;
   margin-right: 4px;
+  margin-top: 5px;
 
   > i {
     position: absolute;
@@ -25,12 +34,79 @@
   }
 }
 
+.DueDate {
+  position: absolute;
+  bottom: 10px;
+  border: 1px solid $color-due-date;
+  padding: 0 10px;
+  border-radius: 10px;
+
+  > label {
+    padding: 0;
+    color: $color-due-date;
+    position: relative;
+    bottom: 1px;
+  }
+}
+
+.AssignedBy {
+  text-align: right;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.ApprovalBox {
+  padding: 10px 5px 5px 10px;
+  position: absolute;
+  width: 50px;
+  left: 0;
+  top: 0;
+}
+
+.ApproveButton, .RejectButton {
+  color: $border-color;
+  transition-duration: 0.5s;
+}
+
+.ApproveButton:hover {
+  border-color: $color-success;
+  color: $color-success;
+}
+
+.ApproveButton:active {
+  background-color: $color-success;
+  transition-duration: 0.2s;
+  color: #ffffff;
+}
+
+.RejectButton:hover {
+  border-color: $color-danger;
+  color: $color-danger;
+}
+
+.RejectButton:active {
+  background-color: $color-danger;
+  transition-duration: 0.2s;
+  color: #ffffff;
+}
+
+.AssignedByLabel {
+  display: inline-block;
+  padding-right: 10px;
+  position: relative;
+}
+
+.DetailBox {
+  padding: 8px 45px 35px 50px;
+}
+
 .larger-icon {
   font-size: 1.4em;
 }
 
 .AssignedImage {
-  border-radius: 3px;
+  border-radius: 15px;
   display: inline-block;
   float: right;
 }

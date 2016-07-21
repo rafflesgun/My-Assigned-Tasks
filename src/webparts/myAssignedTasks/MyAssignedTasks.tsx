@@ -4,6 +4,10 @@ import {
 } from '@ms/sp-client-platform';
 
 import * as React from 'react';
+import {
+  Pivot,
+  PivotItem
+} from 'office-ui-fabric-react';
 
 import styles from './MyAssignedTasks.module.scss';
 import MockHttpClient from './tests/MockHttpClient';
@@ -32,22 +36,38 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     this.mountTaskData();
   }
 
-  public clickEvent() {
-    console.log("This element has been clicked");
+  public actionEvent(type: String, id: Number, e: Object): void {
+    let tasks = this.state.tasks.filter((task) => {
+      return id !== task.Id;
+    });
+    console.log(tasks);
+    this.setState({ tasks: tasks });
+    console.log("This element has been clicked " + type);
   }
 
   public render(): JSX.Element {
 
-    var tasks = this.state.tasks.map((task, key) => {
+    const tasks: Array<Object> = this.state.tasks.map((task: ITaskItem, key: Number) => {
       return (
-        <TaskItem task={task} key={key} clickEvent={this.clickEvent} />
+        <TaskItem task={task} key={task.Id.toString()} actionEvent={this.actionEvent.bind(this)} />
       );
     });
 
     return (
-      <div className={styles.myAssignedTasks}>
-        <div className={styles.container}>
-          {tasks}
+      <div>
+        <h3>My Assigned Tasks</h3>
+        <div>
+          <Pivot>
+            <PivotItem linkText='Priority'>
+            </PivotItem>
+            <PivotItem linkText='Due Date'>
+            </PivotItem>
+          </Pivot>
+        </div>
+        <div className={styles.myAssignedTasks}>
+          <div className={styles.container}>
+            {tasks}
+          </div>
         </div>
       </div>
     );
@@ -97,8 +117,8 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
       const listData: ITaskItems = {
         value:
         [
-          { Title: 'Leave Approval', Id: '1', Description: 'Leave approval between 1st August 2016 till 15 August 2016', Priority: 2, DueDate: null },
-          { Title: 'Expenses Approval', Id: '2', Description: 'Expenses approval', Priority: 1, DueDate: new Date('2016-07-22T21:13:49Z') }
+          { Title: 'Leave Approval', Id: 1, Description: 'Leave approval between 1st August 2016 till 15 August 2016', Priority: 2, DueDate: null },
+          { Title: 'Expenses Approval', Id: 2, Description: 'Expenses approval', Priority: 1, DueDate: new Date('2016-07-22T21:13:49Z') }
         ]
       };
 

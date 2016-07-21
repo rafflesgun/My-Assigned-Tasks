@@ -1,9 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import {
-  Button,
   Image,
-  IImageProps,
   ImageFit,
   Label
 } from 'office-ui-fabric-react';
@@ -17,39 +14,71 @@ export interface ITaskItems {
 export interface ITaskItem {
   Title: string;
   Description: string;
-  Id: string;
+  Id: Number;
   DueDate: Date;
   Priority: Number;
 }
 
-export interface ITaskItemProps {
-  task: ITaskItem;
-  clickEvent(): void;
+export interface ITaskItemState {
+  fadeAway?: String
 }
 
-export class TaskItem extends React.Component<ITaskItemProps, {}> {
+export interface ITaskItemProps {
+  task: ITaskItem;
+  actionEvent(type: String, id: Number, e: Object): void;
+  key: String;
+}
+
+export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
+
+  constructor() {
+    super();
+
+    this.state = {
+      fadeAway: ''
+    };
+  }
+
+  clickHandler(type: string, e: Object) {
+    this.setState({ fadeAway: 'ms-u-scaleUpOut103' });
+    setTimeout(() => {
+      this.props.actionEvent(type, this.props.task.Id, e);
+    }, 300);
+  }
 
   public render(): JSX.Element {
-    var task = this.props.task;
+    var task: ITaskItem = this.props.task;
 
     return (
-      <div>
+      <div className={this.state.fadeAway}>
         <div className={styles.TaskItem}>
-          <div>
-            <span className={styles['rounded-button']} onClick={this.props.clickEvent}>
+          <div className={styles.ApprovalBox}>
+            <a href="#"
+              className={styles.RejectButton + ' ' + styles['rounded-button']}
+              onClick={this.clickHandler.bind(this, 'reject')}
+            >
               <i className="ms-Icon ms-Icon--x"></i>
-            </span>
-            <span className={styles['rounded-button']} onClick={this.props.clickEvent}>
+            </a>
+            <a href="#"
+              className={styles.ApproveButton + ' ' + styles['rounded-button']}
+              onClick={this.clickHandler.bind(this, 'approved')}
+            >
               <i className={"ms-Icon ms-Icon--checkboxCheck " + styles['larger-icon']}></i>
-            </span>
+            </a>
           </div>
-          <div>
-            <p className="ms-fontSize-mPlus">{task.Title}</p>
-            <p className="ms-fontSize-sPlus">{task.Description}</p>
+          <div className={styles.DetailBox}>
+            <div>
+              <span className="ms-fontSize-l">{task.Title}</span><br />
+              <span className="ms-fontSize-sPlus">{task.Description}</span>
+            </div>
+            <div className={styles.DueDate}>
+              <Label className={styles.AssignedByLabel}>Due: 27 May 2016</Label>
+            </div>
+            <div className={styles.AssignedBy}>
+              <Label className={styles.AssignedByLabel}>Assigned by:</Label>
+              <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />
+            </div>
           </div>
-          <span className="text-right">
-            Assigned by: <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />
-          </span>
         </div>
       </div>
     );
