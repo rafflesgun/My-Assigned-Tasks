@@ -10,9 +10,16 @@ import {
 
 import styles from './TaskItem.module.scss';
 
+export interface ITaskItems {
+  value: ITaskItem[];
+}
+
 export interface ITaskItem {
-  name: string;
-  description?: string;
+  Title: string;
+  Description: string;
+  Id: string;
+  DueDate: Date;
+  Priority: Number;
 }
 
 export interface ITaskItemProps {
@@ -37,7 +44,8 @@ export class TaskItem extends React.Component<ITaskItemProps, {}> {
             </span>
           </div>
           <div>
-            <p className="ms-fontSize-mPlus">{task.description}</p>
+            <p className="ms-fontSize-mPlus">{task.Title}</p>
+            <p className="ms-fontSize-sPlus">{task.Description}</p>
           </div>
           <span className="text-right">
             Assigned by: <Image className={styles.AssignedImage} src="http://placehold.it/800x300" imageFit={ImageFit.cover} width={30} height={30} />
