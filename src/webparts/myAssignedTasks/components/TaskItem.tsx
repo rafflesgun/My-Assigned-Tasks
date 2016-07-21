@@ -74,6 +74,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
   public render(): JSX.Element {
     const task: ITaskItem = this.props.task;
+    const authorPic: string = task.authorPicture.indexOf('undefined') > -1 ? "http://placehold.it/800x300" : task.authorPicture;
     const date: any = task.dueDate
       ? (
         <div className={styles.DueDate}>
@@ -106,7 +107,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
             {date}
             <div className={styles.AssignedBy}>
               <Label className={styles.AssignedByLabel}>Assigned by: </Label>
-              <Image className={styles.AssignedImage} src={task.authorPicture} alt={task.authorTitle} imageFit={ImageFit.cover} width={30} height={30} />
+              <Image className={styles.AssignedImage} src={authorPic} alt={task.authorTitle} imageFit={ImageFit.cover} width={30} height={30} />
             </div>
             <div className={styles.PriorityIcon + " " + this._getPriorityClass('class', task.priority)}>
               <span className={"ms-Icon " + this._getPriorityClass('icon', task.priority)}></span>

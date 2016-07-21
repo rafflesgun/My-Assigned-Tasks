@@ -1,0 +1,1 @@
+define([],function(){var e={_W7saGaTX1y7hPcvLqPNZIQ:{PropertyPaneDescription:"Mȃƞäģĕ ťħę MŷȀŝşīġňěďŢâśĸś ŵȇƀƥăŗţ śĕţţįňĝś.",BasicGroupName:"ßâşĩċ",DescriptionFieldLabel:"Ɗȇšćŗĭƿŧĭơń",TaskListNameFieldLabel:"Ţąšƙ Ĺīŝţ Ņâmė"}};return e["default"]=e,e});

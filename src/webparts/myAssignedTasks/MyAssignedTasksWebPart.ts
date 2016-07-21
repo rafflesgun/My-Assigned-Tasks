@@ -150,7 +150,7 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
   }
 
   private _getPictureUrl(eMail: string): string {
-    return `${this.host.pageContext.webAbsoluteUrl}/_layouts/15/userphoto.aspx?size=L&username=${eMail}`;
+    return `${this.host.pageContext.webAbsoluteUrl}/_layouts/15/userphoto.aspx?size=s&username=${eMail}`;
   }
 
   private _getMockTaskData(): Promise<ITasks> {
