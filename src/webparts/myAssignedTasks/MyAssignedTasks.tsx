@@ -32,20 +32,20 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     };
   }
 
-  private componentWillMount() {
+  public componentWillMount(): void {
     this.mountTaskData();
   }
 
   public actionEvent(type: String, id: Number, e: Object): void {
-    let tasks = this.state.tasks.filter((task) => {
+    let tasks: Array<ITaskItem> = this.state.tasks.filter((task: ITaskItem) => {
       return id !== task.Id;
     });
     this.setState({ tasks: tasks });
   }
 
   private _getItems(sort: string): Array<ITaskItem> {
-    var empty = Array<ITaskItem>();
-    var value = Array<ITaskItem>();
+    var empty: Array<ITaskItem> = Array<ITaskItem>();
+    var value: Array<ITaskItem> = Array<ITaskItem>();
     this.state.tasks.forEach((item) => {
       if (item[sort]) {
         value.push(item);
@@ -54,27 +54,19 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
       }
     });
     // Get the current sort
-    value.sort(function (a, b) {
+    value.sort((a, b) => {
       if (a[sort] > b[sort]) return 1;
       if (a[sort] < b[sort]) return -1;
       return 0;
-    }.bind(this));
+    });
 
     return value.concat(empty).slice(0, 5);
   }
 
-  private setSort(item?: PivotItem, ev?: React.MouseEvent): void {
-    ev.preventDefault();
-    const sort = item.props.linkText === 'Priority' ? 'Priority' : 'DueDate';
-    this.setState({
-      tasks: this.state.tasks
-    });
-  }
-
   public render(): JSX.Element {
 
-    let priority = this._getItems('Priority');
-    let due = this._getItems('DueDate');
+    let priority: Array<ITaskItem> = this._getItems('Priority');
+    let due: Array<ITaskItem> = this._getItems('DueDate');
     const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem task={task} key={task.Id.toString() } actionEvent={this.actionEvent.bind(this) } />
