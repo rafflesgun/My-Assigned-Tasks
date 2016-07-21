@@ -13,7 +13,8 @@
     "description": { "default": "Shows the user tasks that have been assigned to them." },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "Deshir MyAssignedTasks",
+      "description": "My Assigned Tasks",
+      "taskListName": "Tasks",
       "value": 15
     }
   }]
