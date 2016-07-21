@@ -7,10 +7,6 @@ import {
 
 import styles from './TaskItem.module.scss';
 
-export interface ITaskItems {
-  value: ITaskItem[];
-}
-
 export interface ITaskItem {
   name: string;
   description?: string;
