@@ -131,3 +131,21 @@ $color-due-date: #A6A6A6;
     color:#00BCF2;
   }
 }
+
+
+@media screen and (max-width: 480px) {
+    .AssignedBy {
+      position: initial;
+      float: none;
+      text-align: left;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .DueDate {
+      position: initial;
+      float: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+}
