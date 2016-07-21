@@ -7,12 +7,16 @@ import {
 
 import styles from './TaskItem.module.scss';
 
+export interface ITaskItems {
+  value: ITaskItem[];
+}
+
 export interface ITaskItem {
-  name: string;
-  description?: string;
-  priority: Number;
-  dueDate: String;
-  id: Number;
+  Title: string;
+  Description: string;
+  Id: Number;
+  DueDate: Date;
+  Priority: Number;
 }
 
 export interface ITaskItemState {
@@ -38,16 +42,16 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
   clickHandler(type: string, e: Object) {
     this.setState({ fadeAway: 'ms-u-scaleUpOut103' });
     setTimeout(() => {
-      this.props.actionEvent(type, this.props.task.id, e);
+      this.props.actionEvent(type, this.props.task.Id, e);
     }, 300);
   }
 
   public render(): JSX.Element {
     const task: ITaskItem = this.props.task;
-    const date = task.dueDate
+    const date = task.DueDate
       ? (
         <div className={styles.DueDate}>
-          <Label className={styles.AssignedByLabel}>{`${task.dueDate}`}</Label>
+          <Label className={styles.AssignedByLabel}>{`${task.DueDate}`}</Label>
         </div>
       ) : <div></div>;
 
@@ -70,7 +74,8 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
           </div>
           <div className={styles.DetailBox}>
             <div>
-              <span className="ms-fontSize-l">{task.description}</span>
+              <span className="ms-fontSize-l">{task.Title}</span><br />
+              <span className="ms-fontSize-sPlus">{task.Description}</span>
             </div>
             {date}
             <div className={styles.AssignedBy}>
