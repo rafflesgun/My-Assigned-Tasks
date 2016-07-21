@@ -74,9 +74,21 @@ $color-due-date: #A6A6A6;
   color: $color-success;
 }
 
+.ApproveButton:active {
+  background-color: $color-success;
+  transition-duration: 0.2s;
+  color: #ffffff;
+}
+
 .RejectButton:hover {
   border-color: $color-danger;
   color: $color-danger;
+}
+
+.RejectButton:active {
+  background-color: $color-danger;
+  transition-duration: 0.2s;
+  color: #ffffff;
 }
 
 .AssignedByLabel {

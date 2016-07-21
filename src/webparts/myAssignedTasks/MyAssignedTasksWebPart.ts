@@ -17,6 +17,7 @@ import * as ReactDom from 'react-dom';
 import strings from './loc/Strings.resx';
 import MyAssignedTasks, { IMyAssignedTasksProps } from './MyAssignedTasks';
 import MockHttpClient from './tests/MockHttpClient';
+import { ITaskItem } from './components/TaskItem';
 
 export interface IMyAssignedTasksWebPartProps {
   description: string;
@@ -42,36 +43,42 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
 
   public render(mode: DisplayMode, data?: IWebPartData): void {
     const element: React.ReactElement<IMyAssignedTasksProps> = React.createElement(MyAssignedTasks, {
-      description: this.properties.description
+      description: this.properties.description,
+      fetchTasksAsync: this.fetchTasksAsync.bind(this)
     });
 
     ReactDom.render(element, this.domElement);
-    this._renderTasksAsync();
   }
 
-  private _renderTasksAsync(): void {
+  public fetchTasksAsync(): Promise<Array<ITaskItem>> {
     // Test environment
     if (this.host.hostType === HostType.TestPage) {
-      this._getMockTaskData().then((response) => {
-        this._renderList(response.value);
-      });
+      return this._getMockTaskData()
+        .then((response) => {
+          return this._parseData(response.value);
+        });
 
       // SharePoint environment
     } else if (this.host.hostType === HostType.ModernPage) {
-      this._getTaskData()
+      return this._getTaskData()
         .then((response) => {
-          this._renderList(response.value);
+          return this._parseData(response.value);
         });
     }
   }
 
-  private _renderList(items):  Array<ITask> {
-    var tasks: Array<ITask> = items.map((item) => {
-      if (typeof(item.Priority) === 'string') {
-          item.Priority = item.Priority.replace(/[^\d]+/g, '');
+  private _parseData(items): Array<Object> {
+    var tasks: Array<ITaskItem> = items.map((item) => {
+      if (typeof (item.Priority) === 'string') {
+        item.Priority = item.Priority.replace(/[^\d]+/g, '');
       }
 
-      return item;
+      return {
+        name: item.Title,
+        description: item.Description,
+        priority: item.Priority,
+        id: parseInt(item.Id)
+      };
     });
 
     return tasks;
@@ -89,8 +96,20 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
       const listData: ITasks = {
         value:
         [
-          { Title: 'Leave Approval', Id: '1', Description: 'Leave approval between 1st August 2016 till 15 August 2016', Priority: 2, DueDate: null },
-          { Title: 'Expenses Approval', Id: '2', Description: 'Expenses approval', Priority: 1, DueDate: new Date('2016-07-22T21:13:49Z') }
+          {
+            Title: 'Leave Approval',
+            Id: '1',
+            Description: 'Leave approval between 1st August 2016 till 15 August 2016',
+            Priority: 2,
+            DueDate: null
+          },
+          {
+            Title: 'Expenses Approval',
+            Id: '2',
+            Description: 'Expenses approval',
+            Priority: 1,
+            DueDate: new Date('2016-07-22T21:13:49Z')
+          }
         ]
       };
 

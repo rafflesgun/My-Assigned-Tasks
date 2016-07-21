@@ -9,6 +9,7 @@ import {
 
 export interface IMyAssignedTasksProps {
   description: string;
+  fetchTasksAsync(): Promise<Array<ITaskItem>>
 }
 
 export interface IMyAssignedTasksState {
@@ -29,28 +30,39 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     // Get data here
     const tasks: Array<ITaskItem> = [
       {
+        id: 0,
         name: "First task",
         description: "This has some content",
         priority: 1
       },
       {
+        id: 1,
         name: "Second task",
         description: "This is what you need to do This is what you need to do this is some more data that you might want to see. Thi si the basically the best thing that we can get out of this. This is what you need to do this is some more data that you might want to see. Thi si the basically the best thing that we can get out of this.",
         priority: 3
       },
       {
+        id: 2,
         name: "Third task",
         description: "This is some other content",
         priority: 2
       }
     ];
 
-    this.setState({
-      tasks: tasks
-    });
+    this.props.fetchTasksAsync()
+      .then((tasks) => {
+        this.setState({
+          tasks: tasks
+        });
+      });
   }
 
-  public actionEvent(type: String, e: Object): void {
+  public actionEvent(type: String, id: Number, e: Object): void {
+    let tasks = this.state.tasks.filter((task) => {
+      return id !== task.id;
+    });
+    console.log(tasks);
+    this.setState({ tasks: tasks });
     console.log("This element has been clicked " + type);
   }
 
@@ -58,7 +70,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
     const tasks: Array<Object> = this.state.tasks.map((task: ITaskItem, key: Number) => {
       return (
-        <TaskItem task={task} key={key.toString()} actionEvent={this.actionEvent} />
+        <TaskItem task={task} key={task.id.toString()} actionEvent={this.actionEvent.bind(this)} />
       );
     });
 

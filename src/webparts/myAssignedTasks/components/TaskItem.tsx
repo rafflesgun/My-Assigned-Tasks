@@ -11,31 +11,52 @@ export interface ITaskItem {
   name: string;
   description?: string;
   priority: Number;
+  id: Number;
+}
+
+export interface ITaskItemState {
+  fadeAway?: String
 }
 
 export interface ITaskItemProps {
   task: ITaskItem;
-  actionEvent(type: String, e: Object): void;
+  actionEvent(type: String, id: Number, e: Object): void;
+  key: String;
 }
 
-export class TaskItem extends React.Component<ITaskItemProps, {}> {
+export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
+
+  constructor() {
+    super();
+
+    this.state = {
+      fadeAway: ''
+    };
+  }
+
+  clickHandler(type: string, e: Object) {
+    this.setState({ fadeAway: 'ms-u-scaleUpOut103' });
+    setTimeout(() => {
+      this.props.actionEvent(type, this.props.task.id, e);
+    }, 300);
+  }
 
   public render(): JSX.Element {
     var task: ITaskItem = this.props.task;
 
     return (
-      <div className="ms-u-slideRightIn10">
+      <div className={this.state.fadeAway}>
         <div className={styles.TaskItem}>
           <div className={styles.ApprovalBox}>
             <a href="#"
               className={styles.RejectButton + ' ' + styles['rounded-button']}
-              onClick={this.props.actionEvent.bind(null, 'reject')}
+              onClick={this.clickHandler.bind(this, 'reject')}
             >
               <i className="ms-Icon ms-Icon--x"></i>
             </a>
             <a href="#"
               className={styles.ApproveButton + ' ' + styles['rounded-button']}
-              onClick={this.props.actionEvent.bind(null, 'approved')}
+              onClick={this.clickHandler.bind(this, 'approved')}
             >
               <i className={"ms-Icon ms-Icon--checkboxCheck " + styles['larger-icon']}></i>
             </a>
