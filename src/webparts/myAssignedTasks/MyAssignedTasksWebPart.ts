@@ -65,7 +65,7 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
     }
   }
 
-  private _renderList(items):  void {
+  private _renderList(items):  Array<ITask> {
     var tasks: Array<ITask> = items.map((item) => {
       if (typeof(item.Priority) === 'string') {
           item.Priority = item.Priority.replace(/[^\d]+/g, '');
@@ -74,18 +74,7 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
       return item;
     });
 
-    let html: string = '';
-    items.forEach((item: ITask) => {
-      html += `
-        <div>
-            <div>
-                <span>${item.Title}</span>
-                <span> ${item.Priority} </span>
-            </div>
-        </div>`;
-    });
-
-    this.domElement.innerHTML += html;
+    return tasks;
   }
 
   private _getTaskData(): Promise<ITasks> {
