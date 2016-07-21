@@ -1,8 +1,3 @@
-import {
-  IWebPartHost,
-  HostType
-} from '@ms/sp-client-platform';
-
 import * as React from 'react';
 import {
   Pivot,
@@ -10,13 +5,12 @@ import {
 } from 'office-ui-fabric-react';
 
 import styles from './MyAssignedTasks.module.scss';
-import MockHttpClient from './tests/MockHttpClient';
-import { ITaskItems, ITaskItem, TaskItem } from './components/TaskItem';
+import { ITaskItem, TaskItem } from './components/TaskItem';
 
 export interface IMyAssignedTasksProps {
   description: string;
   taskListName: string;
-  fetchTasksAsync(): Promise<Array<ITaskItem>>
+  fetchTasksAsync(): Promise<Array<ITaskItem>>;
 }
 
 export interface IMyAssignedTasksState {
@@ -35,7 +29,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
 
   public componentWillMount(): void {
-    var component = this;
+    var component: MyAssignedTasks = this;
 
     this.props.fetchTasksAsync()
       .then((tasks) => {
@@ -46,7 +40,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   }
 
   public actionEvent(type: String, id: Number, e: Object): void {
-    let tasks = this.state.tasks.filter((task) => {
+    const tasks: Array<ITaskItem> = this.state.tasks.filter((task: ITaskItem) => {
       return id !== task.id;
     });
     this.setState({ tasks: tasks });
@@ -74,8 +68,8 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
 
   public render(): JSX.Element {
 
-    let priority = this._getItems('priority');
-    let due = this._getItems('dueDate');
+    const priority: Array<ITaskItem> = this._getItems('priority');
+    const due: Array<ITaskItem> = this._getItems('dueDate');
     const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />

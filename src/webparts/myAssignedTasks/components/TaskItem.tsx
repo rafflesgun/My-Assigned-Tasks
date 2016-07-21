@@ -20,7 +20,7 @@ export interface ITaskItem {
 }
 
 export interface ITaskItemState {
-  fadeAway?: String
+  fadeAway?: String;
 }
 
 export interface ITaskItemProps {
@@ -39,7 +39,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     };
   }
 
-  clickHandler(type: string, e: Object) {
+  public clickHandler(type: string, e: Object): void {
     this.setState({ fadeAway: 'ms-u-scaleUpOut103' });
     setTimeout(() => {
       this.props.actionEvent(type, this.props.task.id, e);
@@ -48,7 +48,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
   public render(): JSX.Element {
     const task: ITaskItem = this.props.task;
-    const date = task.dueDate
+    const date: any = task.dueDate
       ? (
         <div className={styles.DueDate}>
           <Label className={styles.AssignedByLabel}>{task.dueDate.getDate() + "/" + task.dueDate.getMonth() + "/" + task.dueDate.getFullYear()}</Label>

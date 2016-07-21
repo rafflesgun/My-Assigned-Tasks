@@ -69,7 +69,7 @@ export default class MyAssignedTasksWebPart extends BaseClientSideWebPart<IMyAss
     }
   }
 
-  private _parseData(items): Array<Object> {
+  private _parseData(items: Array<any>): Array<ITaskItem> {
     var tasks: Array<ITaskItem> = items.map((item) => {
       if (typeof (item.Priority) === 'string') {
         item.Priority = item.Priority.replace(/[^\d]+/g, '');
