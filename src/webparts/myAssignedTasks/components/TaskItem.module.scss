@@ -36,14 +36,16 @@ $color-due-date: #A6A6A6;
 
 .DueDate {
   position: absolute;
-  bottom: 10px;
+  bottom: 14px;
   border: 1px solid $color-due-date;
   padding: 0 10px;
   border-radius: 10px;
+  text-transform: uppercase;
 
   > label {
     padding: 0;
     color: $color-due-date;
+    font-size: .8em;
     position: relative;
     bottom: 1px;
   }

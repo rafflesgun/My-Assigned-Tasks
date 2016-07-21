@@ -74,7 +74,7 @@ export class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     const date: any = task.dueDate
       ? (
         <div className={styles.DueDate}>
-          <Label className={styles.AssignedByLabel}>{task.dueDate.getDate() + "/" + task.dueDate.getMonth() + "/" + task.dueDate.getFullYear()}</Label>
+          <Label className={styles.AssignedByLabel}>{ "Due: " + task.dueDate.getDate() + "/" + task.dueDate.getMonth() + "/" + task.dueDate.getFullYear()}</Label>
         </div>
       ) : <div></div>;
 

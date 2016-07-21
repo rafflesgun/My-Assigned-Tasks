@@ -5,7 +5,8 @@ import {
   Overlay,
   TextField,
   Button,
-  ButtonType
+  ButtonType,
+  SearchBox
 } from 'office-ui-fabric-react';
 
 import styles from './MyAssignedTasks.module.scss';
@@ -21,6 +22,7 @@ export interface IMyAssignedTasksState {
   tasks: Array<ITaskItem>;
   overlayShowing?: Boolean;
   rejectingItem?: Number;
+  searchTerm?: string;
 }
 
 export default class MyAssignedTasks extends React.Component<IMyAssignedTasksProps, IMyAssignedTasksState> {
@@ -59,11 +61,6 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   }
 
   public rejectEvent(id: Number, e: Object): void {
-    // const tasks: Array<ITaskItem> = this.state.tasks.filter((task: ITaskItem) => {
-    //   return id !== task.id;
-    // });
-    // this.setState({ tasks: tasks });
-
     this.setState({
       tasks: this.state.tasks,
       overlayShowing: true,
@@ -75,7 +72,17 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
   private _getItems(sort: string): Array<ITaskItem> {
     var empty: Array<ITaskItem> = Array<ITaskItem>();
     var value: Array<ITaskItem> = Array<ITaskItem>();
-    this.state.tasks.forEach((item) => {
+    var tasks = this.state.tasks;
+
+    if (this.state.searchTerm !== '' && this.state.searchTerm) {
+      const re = new RegExp(this.state.searchTerm, "gi");
+      tasks = tasks.filter((task: ITaskItem) => {
+        return task.name.match(re) !== null;
+      });
+    }
+
+
+    tasks.forEach((item) => {
       if (item[sort]) {
         value.push(item);
       } else {
@@ -120,11 +127,15 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     console.log(this.refs.rejectionReason.value, removingItem);
   }
 
+  private _search(e: string): void {
+    this.setState({ tasks: this.state.tasks, searchTerm: e });
+  }
+
   public render(): JSX.Element {
 
     const priority: Array<ITaskItem> = this._getItems('priority');
     const due: Array<ITaskItem> = this._getItems('dueDate');
-    const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
+    var priorityTasks: any = priority.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem
           task={task}
@@ -133,7 +144,7 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
           rejectEvent={this.rejectEvent.bind(this)} />
       );
     });
-    const dueTasks: Array<Object> = due.map((task: ITaskItem, key: Number) => {
+    var dueTasks: any = due.map((task: ITaskItem, key: Number) => {
       return (
         <TaskItem
           task={task}
@@ -142,11 +153,15 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
           rejectEvent={this.rejectEvent.bind(this)} />
       );
     });
+
+    if (priorityTasks.length === 0) priorityTasks = <p>No items to display.</p>;
+    if (dueTasks.length === 0) dueTasks = <p>No items to display.</p>;
 
     return (
       <div>
         <h3>My Assigned Tasks</h3>
         <div>
+          <SearchBox onChanged={this._search.bind(this)} />
           <Pivot>
             <PivotItem linkText='Priority' itemKey={0}>
               <div className={styles.myAssignedTasks}>
