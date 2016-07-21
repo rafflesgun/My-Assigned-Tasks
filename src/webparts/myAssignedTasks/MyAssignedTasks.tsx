@@ -77,12 +77,12 @@ export default class MyAssignedTasks extends React.Component<IMyAssignedTasksPro
     let due = this._getItems('dueDate');
     const priorityTasks:  Array<Object> = priority.map((task: ITaskItem, key: Number) => {
       return (
-        <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />
+        <TaskItem task={task} key={task.Id.toString() } actionEvent={this.actionEvent.bind(this) } />
       );
     });
     const dueTasks: Array<Object> = due.map((task: ITaskItem, key: Number) => {
       return (
-        <TaskItem task={task} key={task.id.toString() } actionEvent={this.actionEvent.bind(this) } />
+        <TaskItem task={task} key={task.Id.toString() } actionEvent={this.actionEvent.bind(this) } />
       );
     });
 
